@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordinate Distance Calculator on OSM</title>
+    <!-- Leaflet CSS dosyasını ekleyin -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet JavaScript dosyasını ekleyin -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        // Kullanıcının koordinatları alması
+        function getCoordinates() {
+            const lat1 = parseFloat(prompt("Birinci noktanın enlemini girin:"));
+            // Kullanıcıdan birinci noktanın enlemini alıp float'a çevirip lat1 değişkenine atıyor
+            const lon1 = parseFloat(prompt("Birinci noktanın boylamını girin:"));
+             // Kullanıcıdan birinci noktanın boylamını alıp float'a çevirip lon1 değişkenine atıyor
+            const lat2 = parseFloat(prompt("İkinci noktanın enlemini girin:"));
+             // Kullanıcıdan ikinci noktanın enlemini alıp float'a çevirip lat2 değişkenine atıyor
+            const lon2 = parseFloat(prompt("İkinci noktanın boylamını girin:"));
+             // Kullanıcıdan ikinci noktanın boylamını  alıp float'a çevirip lon2 değişkenine atıyor
+
+            if (isNaN(lat1) || isNaN(lon1) || isNaN(lat2) || isNaN(lon2)) {
+                alert("Lütfen geçerli sayısal değerler girin.");
+                return null;
+            }
+            // lat1, lon1, lat2, lon2 değerlerinden herhangi biri sayı değil ise mesaj verip boş haritaya döndürüyor
+
+            return [[lat1, lon1], [lat2, lon2]]; 
+            // Eğer hepsi sayıysa if satırını çalıştırmıyor bu satır çalışıyor
+        }
+
+        // Euclidean mesafesi hesaplayan fonksiyon
+        function euclideanDistance(coord1, coord2) {
+            const distance = Math.sqrt(Math.pow(coord2[0] - coord1[0], 2) + Math.pow(coord2[1] - coord1[1], 2));
+            return distance;
+        }
+        // cood1 ve coord2 değerlerini pow ile üs alıyor toplama ve çıkarma işlemlerinden sonra sqrt ile kökünü alıyor
+
+        // Harita oluşturma
+        const map = L.map('map').setView([0, 0], 2);  // Orta nokta ve başlangıç zoom seviyesi
+
+        // OpenStreetMap katmanını ekleyin
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Kullanıcıdan koordinatları alın
+        const coordinates = getCoordinates();
+        // Başta bizden aldığı kordinatları coordinates değişkenine atıyor
+
+        if (coordinates) {
+            const coord1 = coordinates[0];
+            const coord2 = coordinates[1];
+            // coordinates 0 yani lat1 ve lon1 değerlerini coord1 değişkenine atıyor
+            // coordinates 1 yani lat2 ve lon2 değerlerini coord2 değişkenine atıyor
+
+            // İki nokta arasındaki doğrudan uzaklığı hesaplayın
+            const result = euclideanDistance(coord1, coord2);
+            // Hesaplama sonucunu result değişkenine atıyor
+
+            // Sonucu konsola ve haritaya işleyin
+            alert(`İki nokta arasındaki doğrudan uzaklık: ${result.toFixed(2)} km`);
+            // Bulduğu uzaklık sonucunu km cinsinden ekrana yazıyor
+
+            // İki noktayı haritaya işleyin
+            L.marker(coord1).addTo(map).bindPopup('Nokta 1');
+            L.marker(coord2).addTo(map).bindPopup('Nokta 2');
+
+            // Haritayı iki noktayı içerecek şekilde ayarlayın
+            map.fitBounds([coord1, coord2]);
+        }
+    </script>
+</body>
+</html>
