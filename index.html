@@ -14,16 +14,16 @@
 <body>
     <form id="coordinateForm">
         <label for="lat1">Birinci noktanın enlemi:</label>
-        <input type="number" step="any" id="lat1" required>
+        <input type="text" step="any" id="lat1" required>
 
         <label for="lon1">Birinci noktanın boylamı:</label>
-        <input type="number" step="any" id="lon1" required>
+        <input type="text" step="any" id="lon1" required>
 
         <label for="lat2">İkinci noktanın enlemi:</label>
-        <input type="number" step="any" id="lat2" required>
+        <input type="text" step="any" id="lat2" required>
 
         <label for="lon2">İkinci noktanın boylamı:</label>
-        <input type="number" step="any" id="lon2" required>
+        <input type="text" step="any" id="lon2" required>
 
         <button type="button" onclick="calculateDistance()">Hesapla</button>
     </form>
@@ -31,56 +31,6 @@
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        function calculateDistance() {
-            const lat1 = parseFloat(document.getElementById("lat1").value);
-            // Kullanıcıdan birinci noktanın enlemini alıp float'a çevirip lat1 değişkenine atıyor
-            const lon1 = parseFloat(document.getElementById("lon1").value);
-            // Kullanıcıdan birinci noktanın boylamını alıp float'a çevirip lon1 değişkenine atıyor
-            const lat2 = parseFloat(document.getElementById("lat2").value);
-            // Kullanıcıdan ikinci noktanın enlemini alıp float'a çevirip lat2 değişkenine atıyor
-            const lon2 = parseFloat(document.getElementById("lon2").value);
-            // Kullanıcıdan ikinci noktanın boylamını  alıp float'a çevirip lon2 değişkenine atıyor
-
-            if (isNaN(lat1) || isNaN(lon1) || isNaN(lat2) || isNaN(lon2)) {
-                alert("Lütfen geçerli sayısal değerler girin.");
-                return;
-            }
-            // lat1, lon1, lat2, lon2 değerlerinden herhangi biri sayı değil ise mesaj verip boş haritaya döndürüyor
-
-            const coord1 = [lat1, lon1];
-            //lat1 ve lon1 değerlerini coord1 değişkenine atıyor
-            const coord2 = [lat2, lon2];
-            //lat2 ve lon2 değerlerini coord2 değişkenine atıyor
-
-            const result = euclideanDistance(coord1, coord2);
-            // Hesaplama sonucunu result değişkenine atıyor
-
-            alert(`İki nokta arasındaki doğrudan uzaklık: ${result.toFixed(2)} km`);
-            // Bulduğu uzaklık sonucunu km cinsinden ekrana yazıyor
-
-            const map = L.map('map').setView(coord1, 13);
-
-            // OpenStreetMap katmanını ekleyin
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-
-            L.marker(coord1).addTo(map)
-                .bindPopup('Birinci nokta');
-
-            L.marker(coord2).addTo(map)
-                .bindPopup('İkinci nokta');
-
-            const line = L.polyline([coord1, coord2], {color: 'red'}).addTo(map);
-            map.fitBounds(line.getBounds());
-        }
-
-        function euclideanDistance(coord1, coord2) {
-            const distance = Math.sqrt(Math.pow(coord2[0] - coord1[0], 2) + Math.pow(coord2[1] - coord1[1], 2));
-            return distance;
-        }
-        // cood1 ve coord2 değerlerini pow ile üs alıyor toplama ve çıkarma işlemlerinden sonra sqrt ile kökünü alıyor
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
